@@ -1,16 +1,29 @@
 import { useState } from 'react'
+import CreatableSelect from 'react-select/creatable'
+import makeAnimated from 'react-select/animated'
 import './App.css'
 
 const CARDS_OPENED = 5
-const DEFAULT_TAGS = ['Hand Trap', 'Starter', 'Extender', 'Brick']
 
 function App() {
   const [deckSize, setDeckSize] = useState(40)
   const [minDeckSize, setMinDeckSize] = useState(6)
-  const [cards, setCards] = useState([
-    {id: 1, name: 'Ash Blossom & Joyous Spring', quantity: 3., tags: [DEFAULT_TAGS[0]]},
-    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [DEFAULT_TAGS[1]]}
+  const [tags, setTags] = useState([
+    { value: 'Hand Trap', label: 'Hand Trap' },
+    { value: 'Starter', label: 'Starter' },
+    { value: 'Extender', label: 'Extender' },
+    { value: 'Brick', label: 'Brick' }
   ])
+  const [cards, setCards] = useState([
+    {id: 1, name: 'Ash Blossom & Joyous Spring', quantity: 3., tags: [tags[0]]},
+    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[1]]}
+  ])
+
+  //TODO: validate tag input and clean input
+  const handleCreateTag = (inputValue) => {
+    const newTag = { value: inputValue, label: inputValue }
+    setTags((prevTags) => [...prevTags, newTag])
+  }
 
   return (
     <>
@@ -35,21 +48,25 @@ function App() {
                 setMinDeckSize(totalQuantity)
                 if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
               }} />
-              <select value={card.tags} onChange={e => {
-                const newCards = [...cards]
-                newCards[index].tags = e.target.value
-                setCards(newCards)
-              }
-              }>
-                <option value="Hand Trap">Hand Trap</option>
-                <option value="Starter">Starter</option>
-                <option value="Extender">Extender</option>
-                <option value="Brick">Brick</option>
-              </select>
+              {/*TODO: multiselect styling*/}
+              <CreatableSelect 
+                value={card.tags} 
+                isMulti 
+                options={tags} 
+                closeMenuOnSelect={false} 
+                components={makeAnimated()}
+                onCreateOption={handleCreateTag}
+                onChange={newValue => {
+                  const newCards = [...cards]
+                  newCards[index].tags = newValue
+                  setCards(newCards)
+                }}
+                placeholder='Tags'
+              />
             </div>
           )
         })}
-
+        <br></br>
         <button onClick={() => {
           setCards([...cards, {id: cards.length + 1, name: '', quantity: 1}])
           const totalQuantity = [...cards, {id: cards.length + 1, name: '', quantity: 1}].reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
@@ -68,7 +85,7 @@ function App() {
 // TODO: add ydke functionality
 
 function calculateProbabilities(deckSize, cardQuantity) {
-  
+  //TODO
 }
 
 function factorial(n) {
