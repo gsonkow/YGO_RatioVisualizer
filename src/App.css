@@ -11,12 +11,7 @@ input{
   margin: 0.5rem 0;
   border: 1px solid #ccc;
   font-size: 1rem;
-}
-input[type=text]{
-  width: 60%;
-}
-input[type=number]{
-  width: 10%;
+  justify-self: stretch;
 }
 
 button{

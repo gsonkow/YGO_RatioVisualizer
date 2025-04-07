@@ -4,16 +4,12 @@ import makeAnimated from 'react-select/animated'
 import './App.css'
 
 const CARDS_OPENED = 5
+const DEFAULT_TAGS = ['Hand Trap', 'Starter', 'Extender', 'Brick']
 
 function App() {
   const [deckSize, setDeckSize] = useState(40)
   const [minDeckSize, setMinDeckSize] = useState(6)
-  const [tags, setTags] = useState([
-    { value: 'Hand Trap', label: 'Hand Trap' },
-    { value: 'Starter', label: 'Starter' },
-    { value: 'Extender', label: 'Extender' },
-    { value: 'Brick', label: 'Brick' }
-  ])
+  const [tags, setTags] = useState(DEFAULT_TAGS.map(tag => ({ value: tag, label: tag })))
   const [cards, setCards] = useState([
     {id: 1, name: 'Ash Blossom & Joyous Spring', quantity: 3., tags: [tags[0]]},
     {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[1]]}
@@ -29,12 +25,16 @@ function App() {
     <>
       <h1>YGO Ratio Visualizer</h1>
       <div id="calculator">
+        {/*TODO: add ydke functionality*/}
+        <button>Import YDKE url</button>
+        &emsp;<input type="text" placeholder='YDKE url' />
+        <br></br>
         Deck Size: <input type="number" min={minDeckSize} value={deckSize} onChange={e => setDeckSize(e.target.value)} />
         <br></br>
 
         {cards.map((card, index) => {
           return (
-            <div id="card" key={index}>
+            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '2fr 50px 1fr', alignItems: 'center'}}>
               <input type="text" placeholder='Card Name' value={card.name} onChange={e => {
                 const newCards = [...cards]
                 newCards[index].name = e.target.value
@@ -48,9 +48,47 @@ function App() {
                 setMinDeckSize(totalQuantity)
                 if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
               }} />
-              {/*TODO: multiselect styling*/}
               <CreatableSelect 
                 value={card.tags} 
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    backgroundColor: '#2b2a33',
+                    fontSize: '1rem',
+                    paggidng: '0.5rem',
+                    margin: '0.5rem 0',
+                    border: '1px solid #ccc',
+                    color: 'white',
+                    boxShadow: 'none',
+                    '&:hover': {
+                      border: '1px solid #ccc',
+                    }
+                  }),
+                  option: (base, state) => ({
+                    ...base,
+                    margin: '0',
+                    padding: 0,
+                    backgroundColor: state.isFocused ? '#494759' : '#2b2a33',
+                    color: 'white',
+                    cursor: 'pointer',
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    margin: '0',
+                    backgroundColor: '#2b2a33',
+                    color: 'white'
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: '#494759',
+                    color: 'white'
+                  }),
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    color: 'white'
+                  }),
+                }}
+                isClearable
                 isMulti 
                 options={tags} 
                 closeMenuOnSelect={false} 
@@ -82,7 +120,7 @@ function App() {
   )
 }
 
-// TODO: add ydke functionality
+
 
 function calculateProbabilities(deckSize, cardQuantity) {
   //TODO
