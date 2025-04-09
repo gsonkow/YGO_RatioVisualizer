@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import makeAnimated from 'react-select/animated'
+import * as ydke from 'ydke'
 import './App.css'
 
 const CARDS_OPENED = 5
@@ -15,10 +16,44 @@ function App() {
     {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[1]]}
   ])
 
+  const [importing, setImporting] = useState(false)
+  const [ydkeURL, setYDKEURL] = useState('')
+
   //TODO: validate tag input and clean input
   const handleCreateTag = (inputValue) => {
     const newTag = { value: inputValue, label: inputValue }
     setTags((prevTags) => [...prevTags, newTag])
+  }
+
+  function importYDKE(url) {
+    var passcodes = []
+    try {
+      passcodes = ydke.parseURL(url)['main']
+      console.log(passcodes)
+    } catch (error) {
+      //TODO: show error message to user
+      console.error('Error parsing YDKE URL:', error)
+      return
+    }
+    
+    
+    var cardCounts = Array.from(passcodes.reduce((map, passcode) => {
+      map.set(passcode, (map.get(passcode) || 0) + 1)
+      return map
+    }, new Map())).map(([passcode, quantity]) => ({
+      passcode,
+      quantity,
+      name: "Card Not Found"
+    }))
+    console.log(cardCounts)
+
+    const uniquePasscodes = [...new Set(passcodes)].join(', ')
+    console.log(uniquePasscodes)
+    // useEffect(() => {
+    //   setImporting(true)
+    //   fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?id=' )
+      
+    // }, []);
   }
 
   return (
@@ -26,8 +61,8 @@ function App() {
       <h1>YGO Ratio Visualizer</h1>
       <div id="calculator">
         {/*TODO: add ydke functionality*/}
-        <button>Import YDKE url</button>
-        &emsp;<input type="text" placeholder='YDKE url' />
+        <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>Import YDKE url</button>
+        &emsp;<input type="text" placeholder='YDKE url' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
         <br></br>
         Deck Size: <input type="number" min={minDeckSize} value={deckSize} onChange={e => setDeckSize(e.target.value)} />
         <br></br>
@@ -116,6 +151,9 @@ function App() {
       <div id='result'>
         
       </div>
+      <footer>
+        Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
+      </footer>
     </>
   )
 }

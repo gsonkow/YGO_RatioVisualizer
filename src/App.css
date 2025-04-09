@@ -28,3 +28,16 @@ button{
 button:hover{
   background-color: rgb(79, 79, 79);
 }
+button:disabled{
+  background-color: rgb(44, 44, 44);
+  cursor: not-allowed;
+}
+
+footer{
+  text-align: center;
+  position: static bottom;
+  margin-top: 2rem;
+  bottom: 0%;
+  left: 0%;
+  width: 100%;
+}
