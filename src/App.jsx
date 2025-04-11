@@ -5,19 +5,32 @@ import * as ydke from 'ydke'
 import './App.css'
 
 const CARDS_OPENED = 5
-const DEFAULT_TAGS = ['Hand Trap', 'Starter', 'Extender', 'Brick']
+const DEFAULT_TAGS = [
+  'Once per turn',
+  'Hand Trap', 
+  'Starter', 
+  'Extender', 
+  'Board Breaker', 
+  'Brick (Bad Draw)'
+]
 
 function App() {
+  //Calculator States
   const [deckSize, setDeckSize] = useState(40)
   const [minDeckSize, setMinDeckSize] = useState(6)
   const [tags, setTags] = useState(DEFAULT_TAGS.map(tag => ({ value: tag, label: tag })))
   const [cards, setCards] = useState([
-    {id: 1, name: 'Ash Blossom & Joyous Spring', quantity: 3., tags: [tags[0]]},
-    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[1]]}
+    {id: 1, name: 'Effect Veiler', quantity: 3., tags: [tags[1]]},
+    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[0], tags[2]]}
   ])
 
+  //Importing YDKE States
   const [importing, setImporting] = useState(false)
+  const [importMessage, setImportMessage] = useState('Import YDKE URL')
   const [ydkeURL, setYDKEURL] = useState('')
+  const [importCardsQuantity, setImportCardsQuantity] = useState(null)
+  const [ygoApiData, setYgoApiData] = useState(null)
+
 
   //TODO: validate tag input and clean input
   const handleCreateTag = (inputValue) => {
@@ -25,51 +38,73 @@ function App() {
     setTags((prevTags) => [...prevTags, newTag])
   }
 
+  //TODO: cleanup
   function importYDKE(url) {
     var passcodes = []
+    setImporting(true)
     try {
       passcodes = ydke.parseURL(url)['main']
       console.log(passcodes)
     } catch (error) {
-      //TODO: show error message to user
       console.error('Error parsing YDKE URL:', error)
+      setImportMessage('Invalid YDKE URL')
+      setImporting(false)
       return
     }
     
-    
-    var cardCounts = Array.from(passcodes.reduce((map, passcode) => {
+    setImportCardsQuantity(Array.from(passcodes.reduce((map, passcode) => {
       map.set(passcode, (map.get(passcode) || 0) + 1)
       return map
     }, new Map())).map(([passcode, quantity]) => ({
       passcode,
       quantity,
-      name: "Card Not Found"
-    }))
-    console.log(cardCounts)
+    })))
 
     const uniquePasscodes = [...new Set(passcodes)].join(', ')
-    console.log(uniquePasscodes)
-    // useEffect(() => {
-    //   setImporting(true)
-    //   fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?id=' )
-      
-    // }, []);
+    
+    setImportMessage('Importing YDKE URL...')
+    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?id=' + uniquePasscodes)
+      .then(response => response.json())
+      .then(json => setYgoApiData(json))
+      .then(setImporting(false))
+      .then(setImportMessage('Import YDKE URL'))
+      .catch(error => {
+        console.error('Error fetching card data:', error)
+        setImportMessage('Sorry!, failed to fetch card data')
+      })
+
   }
+
+  useEffect(() => {
+    if (ygoApiData && importCardsQuantity) {
+      const newCards = ygoApiData.data.map(card => {
+      const importedCard = importCardsQuantity.find(imported => imported.passcode === card.id)
+      return {
+        id: card.id,
+        name: card.name,
+        quantity: importedCard ? importedCard.quantity : 1,
+        tags: []
+      }
+      })
+      setCards(newCards)
+      setDeckSize(newCards.reduce((sum, card) => sum + card.quantity, 0))
+    }
+  }, [ygoApiData])
+
 
   return (
     <>
       <h1>YGO Ratio Visualizer</h1>
       <div id="calculator">
-        {/*TODO: add ydke functionality*/}
-        <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>Import YDKE url</button>
-        &emsp;<input type="text" placeholder='YDKE url' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
+        <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
+        &emsp;<input type="text" placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
         <br></br>
-        Deck Size: <input type="number" min={minDeckSize} value={deckSize} onChange={e => setDeckSize(e.target.value)} />
+        Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
         <br></br>
 
         {cards.map((card, index) => {
           return (
-            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '2fr 50px 1fr', alignItems: 'center'}}>
+            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '1.5fr 50px 1fr', alignItems: 'center'}}>
               <input type="text" placeholder='Card Name' value={card.name} onChange={e => {
                 const newCards = [...cards]
                 newCards[index].name = e.target.value
@@ -115,6 +150,7 @@ function App() {
                   }),
                   multiValue: (base) => ({
                     ...base,
+                    width: 'fit-content',
                     backgroundColor: '#494759',
                     color: 'white'
                   }),
