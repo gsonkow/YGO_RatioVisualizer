@@ -16,6 +16,7 @@ const DEFAULT_TAGS = [
 
 function App() {
   //Calculator States
+  //const [outputMessage, setOutputMessage] = useState('No cards selected')
   const [deckSize, setDeckSize] = useState(40)
   const [minDeckSize, setMinDeckSize] = useState(6)
   const [tags, setTags] = useState(DEFAULT_TAGS.map(tag => ({ value: tag, label: tag })))
@@ -44,7 +45,7 @@ function App() {
     setImporting(true)
     try {
       passcodes = ydke.parseURL(url)['main']
-      console.log(passcodes)
+      console.log('IDs:', passcodes)
     } catch (error) {
       console.error('Error parsing YDKE URL:', error)
       setImportMessage('Invalid YDKE URL')
@@ -177,15 +178,16 @@ function App() {
         })}
         <br></br>
         <button onClick={() => {
-          setCards([...cards, {id: cards.length + 1, name: '', quantity: 1}])
+          setCards([...cards, {id: cards.length + 1, name: '', quantity: 1, tags: []}])
           const totalQuantity = [...cards, {id: cards.length + 1, name: '', quantity: 1}].reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
           setMinDeckSize(totalQuantity)
           if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
           }}>Add Card</button>
 
       </div>
+      <br></br>
       <div id='result'>
-        
+        {calculateProbabilities(cards, deckSize, tags)}
       </div>
       <footer>
         Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
@@ -196,8 +198,23 @@ function App() {
 
 
 
-function calculateProbabilities(deckSize, cardQuantity) {
-  //TODO
+function calculateProbabilities(cards, deckSize, tags) {
+  var probPerTag = new Array(tags.length).fill(0)
+  
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i]
+    if (card.tags.includes(tags[0])) {
+      probPerTag[0] += hypergeometricAtLeast(deckSize, card.quantity, CARDS_OPENED, 2)
+    }
+    for (let j = 1; j < tags.length; j++) {
+      const tag = tags[j]
+      if (card.tags.includes(tag)) {
+        probPerTag[j] += hypergeometricAtLeast(deckSize, card.quantity, CARDS_OPENED, 1)
+      }
+    }
+  }
+  return (tags.map(tag => tag.label + ': ' + probPerTag[tags.indexOf(tag)])).join("  ")
+
 }
 
 function factorial(n) {
@@ -208,8 +225,30 @@ function combination(m, n) {
   return factorial(m) / (factorial(n) * factorial(m - n))
 }
 
+/*
+  Hypergeometric Distribution
+    N: The total size of the population.
+    K: The total number of "successes" in the population.
+    n: The number of draws (samples) taken from the population.
+    k: The number of "successes" observed in the sample
+*/
 function hypergeometric(N, K, n, k) {
   return (combination(K, k) * combination(N - K, n - k)) / combination(N, n)
+}
+
+/*
+  Hypergeometric Distribution for at least k successes
+    N: The total size of the population.
+    K: The total number of "successes" in the population.
+    n: The number of draws (samples) taken from the population.
+    k: The minimum number of "successes" observed in the sample
+*/
+function hypergeometricAtLeast(N, K, n, k) {
+  let probability = 0;
+  for (let i = k; i <= Math.min(K, n); i++) {
+    probability += hypergeometric(N, K, n, i);
+  }
+  return probability;
 }
 
 export default App
