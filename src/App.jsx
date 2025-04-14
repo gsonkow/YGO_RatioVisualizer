@@ -5,13 +5,15 @@ import * as ydke from 'ydke'
 import './App.css'
 
 const CARDS_OPENED = 5
+// OPT currently must be first in this list
 const DEFAULT_TAGS = [
   'Once per turn',
+  'Bad Draw Going First',
+  'Bad Draw Going Second',
   'Hand Trap', 
-  'Starter', 
-  'Extender', 
   'Board Breaker', 
-  'Brick (Bad Draw)'
+  'Starter',
+  'Extender',
 ]
 
 function App() {
@@ -19,10 +21,11 @@ function App() {
   //const [outputMessage, setOutputMessage] = useState('No cards selected')
   const [deckSize, setDeckSize] = useState(40)
   const [minDeckSize, setMinDeckSize] = useState(6)
+  const [numOfEngines, setNumOfEngines] = useState(1)
   const [tags, setTags] = useState(DEFAULT_TAGS.map(tag => ({ value: tag, label: tag })))
   const [cards, setCards] = useState([
-    {id: 1, name: 'Effect Veiler', quantity: 3., tags: [tags[1]]},
-    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[0], tags[2]]}
+    {id: 1, name: 'Effect Veiler', quantity: 3., tags: [tags[3]]},
+    {id: 2, name: 'Snake-Eye Ash', quantity: 3, tags: [tags[0], tags[5]]},
   ])
 
   //Importing YDKE States
@@ -92,6 +95,18 @@ function App() {
     }
   }, [ygoApiData])
 
+  useEffect(() => {
+    const engineTags = Array.from({ length: numOfEngines }, (_, i) => ({
+      value: `Engine ${i + 1}`,
+      label: `Engine ${i + 1}`
+    }));
+    const customTags = tags.filter(tag => 
+      !DEFAULT_TAGS.some(defaultTag => defaultTag === tag.value) &&
+      !engineTags.some(engineTag => engineTag.value === tag.value) &&
+      !/^Engine \d+$/.test(tag.value)
+    );
+    setTags([...DEFAULT_TAGS.map(tag => ({ value: tag, label: tag })), ...engineTags, ...customTags]);
+  }, [numOfEngines])
 
   return (
     <>
@@ -101,7 +116,8 @@ function App() {
         &emsp;<input type="text" placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
         <br></br>
         Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
-        <br></br>
+        &emsp;
+        Number of Engines: <input type="number" min="1" value={numOfEngines} style={{width: '50px'}} onChange={e => setNumOfEngines(e.target.value)} />
 
         {cards.map((card, index) => {
           return (
