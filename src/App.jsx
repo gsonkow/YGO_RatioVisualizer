@@ -27,7 +27,7 @@ const EXAMPLE_DECK_TAGS = [
   [2, 3],
   [0, 1, 6, 8]
 ]
-// OPT currently must be first in this list
+
 const DEFAULT_TAGS = [
   'Once per turn',
   'Discard Cost/Effect',
@@ -140,8 +140,7 @@ function App() {
     }
   }, [ygoApiData])
 
-  // Sets up example deck (maybe dont make api call for this?)
-  //TODO: reenable
+  // Sets up example deck
   useEffect(() => {
     console.log('Setting up example deck...')
     handleEngineChange(numEngines)
