@@ -131,7 +131,6 @@ function App() {
       setCards(newCards)
       setDeckSize(newCards.reduce((sum, card) => sum + card.quantity, 0))
       if (setupCounter === 1) {
-        console.log("tagging example" , tags)
         setCards(newCards.map((card, index) => ({
           ...card,
           tags: EXAMPLE_DECK_TAGS[index].map(tagIndex => tags[tagIndex])
@@ -158,8 +157,8 @@ function App() {
         Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
         &emsp;
         Number of Engines: <input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
-          setNumEngines(e.target.value)
-          handleEngineChange(e.target.value)
+          setNumEngines(Number(e.target.value))
+          handleEngineChange(Number(e.target.value))
           }} />
 
         {/* Card input and editor */}

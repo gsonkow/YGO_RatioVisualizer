@@ -1,36 +1,42 @@
 const CARDS_OPENED = 5
 
 export default function Calculator(cards, tags, deckSize, numEngines) {
-    const deckTags = tags.map(tag => tag.label);
-    
+    const deckTags = tags.map(tag => tag.label)
+    const defaultTags = deckTags.slice(0, 8)
+    const engineTags = deckTags.slice(8, 8 + numEngines)
+    const customTags = deckTags.slice(8 + numEngines)
+
+
     // tags[6] is the starter tag
-    var startersPerEngine = new Array(numEngines).fill(0);
+    var startersPerEngine = new Array(numEngines).fill(0)
     for (let i = 0; i < numEngines; i++) {
         for (let cardIndex = 0; cardIndex < cards.length; cardIndex++) {
-            if (cards[cardIndex].tags.includes(tags[6]) && cards[cardIndex].tags.includes(engineTag(i + 1, tags))) {
-                startersPerEngine[i] += cards[cardIndex].quantity;
+            if (hasTag(cards[cardIndex].tags, tags[6]) && hasTag(cards[cardIndex].tags, engineTag(i + 1, tags))) {
+                startersPerEngine[i] += cards[cardIndex].quantity
             }
         }
     }
+    
+    console.log('Starter cards per engine:', startersPerEngine)
 
     //formatted as [Engine][# of starters opened] [n][0] is exception: it is one or more starters opened
-    var starterProbabilities = new Array(numEngines).fill(null).map(() => new Array(CARDS_OPENED + 1).fill(0));
+    var starterProbabilities = new Array(numEngines).fill(null).map(() => new Array(CARDS_OPENED + 1).fill(0))
     for (let engine = 0; engine < numEngines; engine++) {
-        starterProbabilities[engine][0] = hypergeometricAtLeast(deckSize, startersPerEngine[engine], CARDS_OPENED, 1);
+        starterProbabilities[engine][0] = hypergeometricAtLeast(deckSize, startersPerEngine[engine], CARDS_OPENED, 1)
         for (let starters = 1; starters <= CARDS_OPENED; starters++) {
-            starterProbabilities[engine][starters] = hypergeometric(deckSize, startersPerEngine[engine], CARDS_OPENED, starters);
+            starterProbabilities[engine][starters] = hypergeometric(deckSize, startersPerEngine[engine], CARDS_OPENED, starters)
         }
     }
     
-    console.log('Cards:', cards)
-    console.log('Starters per Engine:', startersPerEngine)
-    console.log('Starter Probabilities:', starterProbabilities)
+    console.log('Starter probabilities:', starterProbabilities)
     
     //TODO: put results in grid/ table format
     return <div style={{textAlign: 'left'}}>
     {starterProbabilities.map((engine, index) => {
         return (
             <div>Engine {index + 1}: 
+            <br></br>
+            Number of starters: {startersPerEngine[index]}
             <br></br>
             Opening 1 or more starters: {Math.round(engine[0] * 100000) / 1000}%
             {engine.map((starters, index) => {if (index > 0) {return (<div>Opening {index} starter(s): {Math.round(starters * 100000) / 1000}%</div>)}})}
@@ -39,6 +45,10 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
         )
     })}
     </div>
+}
+
+function hasTag(cardTags, targetTag) {
+    return cardTags.some(tag => tag.value === targetTag.value && tag.label === targetTag.label)
 }
 
 function engineTag(num, tags) {
@@ -51,14 +61,13 @@ function engineTag(num, tags) {
     }
 }
 
-
 function factorial(n) {
     return n > 1 ? n * factorial(n - 1) : 1
 }
   
 function combination(m, n) {
-    if (m < n) return 0;
-    return factorial(m) / (factorial(n) * factorial(m - n));
+    if (m < n) return 0
+    return factorial(m) / (factorial(n) * factorial(m - n))
 }
   
 /*
@@ -80,9 +89,9 @@ Hypergeometric Distribution for at least k successes
     k: The minimum number of "successes" observed in the sample
 */
 function hypergeometricAtLeast(N, K, n, k) {
-    let probability = 0;
+    let probability = 0
     for (let i = k; i <= Math.min(K, n); i++) {
-      probability += hypergeometric(N, K, n, i);
+      probability += hypergeometric(N, K, n, i)
     }
-    return probability;
+    return probability
 }
