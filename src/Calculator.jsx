@@ -1,3 +1,5 @@
+import './Calculator.css'
+
 const CARDS_OPENED = 5
 
 export default function Calculator(cards, tags, deckSize, numEngines) {
@@ -11,12 +13,12 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
     var startersPerEngine = new Array(numEngines).fill(0)
     for (let i = 0; i < numEngines; i++) {
         for (let cardIndex = 0; cardIndex < cards.length; cardIndex++) {
-            if (hasTag(cards[cardIndex].tags, tags[6]) && hasTag(cards[cardIndex].tags, engineTag(i + 1, tags))) {
+            if (hasTag(cards[cardIndex].tags, tags[6]) && cards[cardIndex].tags.some(tag => tag.label === engineTags[i])) {
                 startersPerEngine[i] += cards[cardIndex].quantity
             }
         }
     }
-    
+
     console.log('Starter cards per engine:', startersPerEngine)
 
     //formatted as [Engine][# of starters opened] [n][0] is exception: it is one or more starters opened
@@ -29,36 +31,48 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
     }
     
     console.log('Starter probabilities:', starterProbabilities)
-    
+
+    var totalPerTag = new Array(deckTags.length).fill(0)
+    for (let i = 0; i < deckTags.length; i++) {
+        for (let cardIndex = 0; cardIndex < cards.length; cardIndex++) {
+            if (hasTag(cards[cardIndex].tags, tags[i])) {
+                totalPerTag[i] += cards[cardIndex].quantity
+            }
+        }
+    }
+
+
+
+    var percentagePerTag = new Array(deckTags.length).fill(0)
+    for (let i = 0; i < deckTags.length; i++) {
+        percentagePerTag[i] = hypergeometricAtLeast(deckSize, totalPerTag[i], CARDS_OPENED, 1)
+    }
+
     //TODO: put results in grid/ table format
-    return <div style={{textAlign: 'left'}}>
+    return <div id='results'>
+    <div id='starters'>
     {starterProbabilities.map((engine, index) => {
         return (
-            <div>Engine {index + 1}: 
+            <div>
+            <h3 id='engineTitle'>Engine {index + 1}: </h3>
+            Number of starters: <div id='value'>{startersPerEngine[index]}</div>
             <br></br>
-            Number of starters: {startersPerEngine[index]}
-            <br></br>
-            Opening 1 or more starters: {Math.round(engine[0] * 100000) / 1000}%
-            {engine.map((starters, index) => {if (index > 0) {return (<div>Opening {index} starter(s): {Math.round(starters * 100000) / 1000}%</div>)}})}
-            <br></br>
+            Opening 1+ starters: <div id='value'>{percentage(engine[0])}%</div>
+            {engine.map((starters, index) => {if (index > 0) {return (<div>Opening {index} starter(s): <div id='value'>{percentage(starters)}%</div></div>)}})}
             </div>
         )
     })}
     </div>
+    {percentagePerTag.map((value, index) => {if (index > 0 && value > 0) {return (<div>Opening at least 1 {deckTags[index]}: {percentage(value)}%</div>)}})}
+    </div>
+}
+
+function percentage(value) {
+    return Math.round(value * 100000) / 1000
 }
 
 function hasTag(cardTags, targetTag) {
     return cardTags.some(tag => tag.value === targetTag.value && tag.label === targetTag.label)
-}
-
-function engineTag(num, tags) {
-    try {
-        return tags[num + 7]
-    }
-    catch (error) {
-        console.error('Error getting engine tag:', error)
-        return tags[8]
-    }
 }
 
 function factorial(n) {

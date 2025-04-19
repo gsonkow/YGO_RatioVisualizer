@@ -19,6 +19,15 @@ input{
   justify-self: stretch;
 }
 
+img{
+  max-width: 15%;
+  max-height: 15%;
+  margin: 0;
+}
+img:hover{
+  filter: brightness(0.9);
+}
+
 button{
   padding: 0.5rem 1rem;
   color: white;
@@ -35,6 +44,11 @@ button:hover{
 button:disabled{
   background-color: rgb(44, 44, 44);
   cursor: not-allowed;
+}
+
+button[id='remove']{
+  font-weight: 900;
+  border-radius: 2px;
 }
 
 footer{

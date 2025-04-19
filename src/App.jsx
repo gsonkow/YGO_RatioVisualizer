@@ -4,6 +4,7 @@ import makeAnimated from 'react-select/animated'
 import * as ydke from 'ydke'
 import Calculator from './Calculator.jsx'
 import './App.css'
+import Kofi from './assets/support_me_on_kofi_blue.png'
 
 const EXAMPLE_DECK = "ydke://o6lXBaOpVwWvI94AryPeAK8j3gCglAQC6czIBenMyAXpzMgFsjLMBbIyzAVS94oDIkiZACJImQAiSJkAMdwRATHcEQEx3BEBqniTAooMdAEqlWUBKpVlATUHgwI1B4MCNQeDAhNWxAMTVsQDE1bEAyH2uwF0OV4DdDleA3Q5XgO1dg4BR7x9AEe8fQBHvH0AYmqzAwGvyQQBr8kEAa/JBA==!Vi0OBeYwAgI10JADNdCQA92drgDNQlcFg/jHA5a6cwGBnV4DsUmeBcoavwECXIICAlyCAkjTkAHrqosF!!"
 const EXAMPLE_DECK_TAGS = [
@@ -150,6 +151,7 @@ function App() {
   return (
     <>
       <h1>YGO Ratio Visualizer</h1>
+      
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
@@ -164,7 +166,15 @@ function App() {
         {/* Card input and editor */}
         {cards.map((card, index) => {
           return (
-            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '1.5fr 50px 1fr', alignItems: 'center'}}>
+            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '44px 1.5fr 50px 1fr', alignItems: 'center'}}>
+              <button  id="remove" onClick={() => {
+                const newCards = [...cards]
+                newCards.splice(index, 1)
+                setCards(newCards)
+                const totalQuantity = newCards.reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
+                setMinDeckSize(totalQuantity)
+                if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
+              }}>X</button>
               <input type="text" placeholder='Card Name' value={card.name} onChange={e => {
                 const newCards = [...cards]
                 newCards[index].name = e.target.value
@@ -250,9 +260,10 @@ function App() {
 
       </div>
       <br></br>
-      <div id='result'>
+      <div>
         {Calculator(cards, tags, deckSize, numEngines)}
       </div>
+      <a id="Ko-fi" href="https://ko-fi.com/gsonkow" target="_blank"><img src={Kofi} alt="Support Me on Ko-fi"/></a>
       <footer>
         Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
       </footer>
