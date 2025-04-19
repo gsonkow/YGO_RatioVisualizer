@@ -2,7 +2,7 @@
 
 # Yu-Gi-Oh! Ratio Visualizer
 
-This tool aims to help Yu-Gi-Oh! players visualize and adjust card ratios in thier decks to open better hands more consistently.
+This tool aims to help Yu-Gi-Oh! players visualize and adjust the card ratios in their decks to open better hands in games more consistently.
 
 ## Features
 - Import your deck with a YDKE url or manually enter it in

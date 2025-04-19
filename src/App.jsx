@@ -151,7 +151,7 @@ function App() {
   return (
     <>
       <h1>YGO Ratio Visualizer</h1>
-      
+      <a id="Ko-fi" href="https://ko-fi.com/gsonkow" target="_blank"><img src={Kofi} alt="Support Me on Ko-fi"/></a>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
@@ -162,6 +162,11 @@ function App() {
           setNumEngines(Number(e.target.value))
           handleEngineChange(Number(e.target.value))
           }} />
+        &emsp;
+        <button onClick={() => {
+          setCards([])
+          setDeckSize(40)
+        }}> Clear Deck </button>
 
         {/* Card input and editor */}
         {cards.map((card, index) => {
@@ -195,9 +200,10 @@ function App() {
                     ...base,
                     backgroundColor: '#2b2a33',
                     fontSize: '1rem',
-                    paggidng: '0.5rem',
-                    margin: '0.5rem 0',
+                    paggidng: '0',
+                    margin: '0',
                     border: '1px solid #ccc',
+                    borderRadius: '0',
                     color: 'white',
                     boxShadow: 'none',
                     '&:hover': {
@@ -263,7 +269,6 @@ function App() {
       <div>
         {Calculator(cards, tags, deckSize, numEngines)}
       </div>
-      <a id="Ko-fi" href="https://ko-fi.com/gsonkow" target="_blank"><img src={Kofi} alt="Support Me on Ko-fi"/></a>
       <footer>
         Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
       </footer>
