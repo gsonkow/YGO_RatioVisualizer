@@ -8,6 +8,11 @@
 
 h1{
   font-size: 2.5rem;
+  margin: 0;
+}
+
+h3{
+  margin-top: 0;
   margin-bottom: 1rem;
 }
 
@@ -19,12 +24,25 @@ input{
   justify-self: stretch;
 }
 
-img{
-  max-width: 15%;
-  max-height: 15%;
+
+img[id='Logo']{
+  max-width: 18rem;
+  max-height: 18rem;
   margin: 0;
 }
-img:hover{
+
+img[id='gitLogo']{
+  max-width: 1.2rem;
+  max-height: 1.2rem;
+  vertical-align: text-bottom;
+}
+
+img[id='Ko-fi']{
+  max-width: 14rem;
+  max-height: 14rem;
+  margin: 0;
+}
+img[id='Ko-fi']:hover{
   filter: brightness(0.9);
 }
 

@@ -5,6 +5,8 @@ import * as ydke from 'ydke'
 import Calculator from './Calculator.jsx'
 import './App.css'
 import Kofi from './assets/support_me_on_kofi_blue.png'
+import Logo from './assets/DarkLogo.png'
+import GitLogo from './assets/github-mark-white.svg'
 
 const EXAMPLE_DECK = "ydke://o6lXBaOpVwWvI94AryPeAK8j3gCglAQC6czIBenMyAXpzMgFsjLMBbIyzAVS94oDIkiZACJImQAiSJkAMdwRATHcEQEx3BEBqniTAooMdAEqlWUBKpVlATUHgwI1B4MCNQeDAhNWxAMTVsQDE1bEAyH2uwF0OV4DdDleA3Q5XgO1dg4BR7x9AEe8fQBHvH0AYmqzAwGvyQQBr8kEAa/JBA==!Vi0OBeYwAgI10JADNdCQA92drgDNQlcFg/jHA5a6cwGBnV4DsUmeBcoavwECXIICAlyCAkjTkAHrqosF!!"
 const EXAMPLE_DECK_TAGS = [
@@ -66,6 +68,7 @@ function App() {
   }
 
   function handleEngineChange(num) {
+    setNumEngines(num)
     const engineTags = Array.from({ length: num }, (_, i) => ({
       value: `Engine ${i + 1}`,
       label: `Engine ${i + 1}`
@@ -130,7 +133,9 @@ function App() {
       }
       })
       setCards(newCards)
-      setDeckSize(newCards.reduce((sum, card) => sum + card.quantity, 0))
+      const numCards = newCards.reduce((sum, card) => sum + card.quantity, 0)
+      setDeckSize(numCards)
+      setMinDeckSize(numCards)
       if (setupCounter === 1) {
         setCards(newCards.map((card, index) => ({
           ...card,
@@ -150,8 +155,9 @@ function App() {
 
   return (
     <>
-      <h1>YGO Ratio Visualizer</h1>
-      <a id="Ko-fi" href="https://ko-fi.com/gsonkow" target="_blank"><img src={Kofi} alt="Support Me on Ko-fi"/></a>
+      <h1><img id='Logo' src={Logo} alt="YGO Ratio Visualizer"/></h1>
+      <h3>By <a href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>gsonkow</a></h3>
+      <a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support Me on Ko-fi"/></a>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
@@ -159,13 +165,13 @@ function App() {
         Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
         &emsp;
         Number of Engines: <input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
-          setNumEngines(Number(e.target.value))
           handleEngineChange(Number(e.target.value))
           }} />
         &emsp;
         <button onClick={() => {
           setCards([])
           setDeckSize(40)
+          handleEngineChange(1)
         }}> Clear Deck </button>
 
         {/* Card input and editor */}
@@ -257,6 +263,12 @@ function App() {
         })}
         
         <br></br>
+        Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
+        &emsp;
+        Number of Engines: <input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
+          handleEngineChange(Number(e.target.value))
+          }} />
+        &emsp;
         <button onClick={() => {
           setCards([...cards, {id: cards.length + 1, name: '', quantity: 1, tags: []}])
           const totalQuantity = [...cards, {id: cards.length + 1, name: '', quantity: 1}].reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
@@ -270,7 +282,7 @@ function App() {
         {Calculator(cards, tags, deckSize, numEngines)}
       </div>
       <footer>
-        Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
+        <a href="https://github.com/gsonkow/YGO_RatioVisualizer" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>Project</a> built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
       </footer>
     </>
   )

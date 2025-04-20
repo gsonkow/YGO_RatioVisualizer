@@ -50,25 +50,57 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
 
     //TODO: put results in grid/ table format
     return <div id='results'>
-    <div id='starters'>
+    <p>Hover your mouse over any percentage to see the raw calculation.</p>
+    <div id='explainStarters'>
+        <h2>Starters per Engine</h2>
+        <p>Probability of opening the specified number of starters by engine.</p>
+    </div>
+    <table id='starters'>
+        <tr>
+            <th>Engine</th>
+            <th>Starters</th>
+            <th id='numeric'>1+</th>
+            <th id='numeric'>1</th>
+            <th id='numeric'>2</th>
+            <th id='numeric'>3</th>
+            <th id='numeric'>4</th>
+            <th id='numeric'>5</th>
+        </tr>
     {starterProbabilities.map((engine, index) => {
         return (
-            <div>
-            <h3 id='engineTitle'>Engine {index + 1}: </h3>
-            Number of starters: <div id='value'>{startersPerEngine[index]}</div>
-            <br></br>
-            Opening 1+ starters: <div id='value'>{percentage(engine[0])}%</div>
-            {engine.map((starters, index) => {if (index > 0) {return (<div>Opening {index} starter(s): <div id='value'>{percentage(starters)}%</div></div>)}})}
-            </div>
+            <tr>
+                <td>Engine {index + 1}</td>
+                <td id='numeric'>{startersPerEngine[index]}</td>
+                <td id='numeric'>{percentage(engine[0])}</td>
+            {engine.map((starters, index) => {if (index > 0) {return (<td id='numeric'>{percentage(starters)}</td>)}})}
+            </tr>
         )
     })}
+    </table>
+
+    {/* maybe limit this to custom tags only */}
+    <div id='explainAllTags'>
+        <h2>All Tags</h2>
+        <p>Probability of opening at least one card with the tag in your opening hand. ({CARDS_OPENED} cards)</p>
     </div>
-    {percentagePerTag.map((value, index) => {if (index > 0 && value > 0) {return (<div>Opening at least 1 {deckTags[index]}: {percentage(value)}%</div>)}})}
+    <table id='allTags'>
+        <tr>
+            {percentagePerTag.map((value, index) => {if (index > 0 && value > 0) {return (<th>{deckTags[index]}</th>)}})}
+        </tr>
+        <tr>
+            {percentagePerTag.map((value, index) => {if (index > 0 && value > 0) {return (<td>{percentage(value)}</td>)}})}
+        </tr>
+        
+    </table>
     </div>
 }
 
 function percentage(value) {
-    return Math.round(value * 100000) / 1000
+    //return Math.round(value * 100000) / 1000
+    return <div id ='percentage'>
+        <div id='rounded'>{Math.round(value * 10000) / 100}%</div>
+        <div id='raw'>{value}</div> 
+    </div>
 }
 
 function hasTag(cardTags, targetTag) {

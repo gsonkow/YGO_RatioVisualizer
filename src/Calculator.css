@@ -9,12 +9,37 @@ div[id='starters']{
     column-gap: 15px;
 }
 
-h3 {
+h2 {
     margin-bottom: 0;
 }
 
-div[id='value'] {
+table {
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+th, td {
+    border: 1px solid #999999;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #3d3d3d;
+}
+
+th[id = 'numeric'], td[id = 'numeric'] {
     text-align: right;
-    display: inline-table;
-    align-items: right;
+}
+
+div[id = 'raw'] {
+    display: none;
+}
+
+div[id = 'percentage']:hover div[id = 'raw'] {
+    display: block;
+}
+
+div[id = 'percentage']:hover div[id = 'rounded'] {
+    display: none;
 }
