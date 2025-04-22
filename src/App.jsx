@@ -23,7 +23,7 @@ const EXAMPLE_DECK_TAGS = [
   [0, 4],
   [2, 4],
   [0, 6, 9],
-  [2, 3],
+  [5],
   [0, 6, 9],
   [7],
   [0, 6, 8],
@@ -157,7 +157,7 @@ function App() {
     <>
       <h1><img id='Logo' src={Logo} alt="YGO Ratio Visualizer"/></h1>
       <h3>By <a href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>gsonkow</a></h3>
-      <a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support Me on Ko-fi"/></a>
+      <a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi"/></a>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
@@ -177,7 +177,7 @@ function App() {
         {/* Card input and editor */}
         {cards.map((card, index) => {
           return (
-            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '44px 1.5fr 50px 1fr', alignItems: 'center'}}>
+            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '2.6rem 1.5fr 4rem 1fr', alignItems: 'center'}}>
               <button  id="remove" onClick={() => {
                 const newCards = [...cards]
                 newCards.splice(index, 1)

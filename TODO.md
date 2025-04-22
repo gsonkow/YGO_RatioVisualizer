@@ -1,0 +1,10 @@
+- multi-hypergeometric to check opening discard + dead card probability
+- consolidate custom tag results
+    - consolidate results option?
+- 6th draw for going second
+- ?per engine of other tags?
+- suggestions/autofill when entering card name
+- more import options
+- mobile responsive layout
+- analytics
+- post/publish/host
