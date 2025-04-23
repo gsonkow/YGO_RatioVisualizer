@@ -87,7 +87,7 @@ function App() {
     setImporting(true)
     try {
       passcodes = ydke.parseURL(url)['main']
-      console.log('Imported IDs:', passcodes)
+      //console.log('Imported IDs:', passcodes)
     } catch (error) {
       console.error('Error parsing YDKE URL:', error)
       setImportMessage('Invalid YDKE URL')
@@ -147,7 +147,7 @@ function App() {
 
   // Sets up example deck
   useEffect(() => {
-    console.log('Setting up example deck...')
+    //console.log('Setting up example deck...')
     handleEngineChange(numEngines)
     importYDKE(EXAMPLE_DECK) 
   }, [])

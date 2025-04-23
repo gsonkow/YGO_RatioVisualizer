@@ -22,8 +22,6 @@ This tool aims to help Yu-Gi-Oh! players visualize and adjust the card ratios in
     - 'Hard Once Per Turn' Effects
 - Add custom tags to your cards to monitor as well
 
-<!-- ## How to use -->
-
 
 
 Built with <a href="https://www.npmjs.com/package/ydke" target='_blank'>ydke.js</a> and <a href='https://ygoprodeck.com/api-guide/' target='_blank'>Yu-Gi-Oh! API by YGOPRODeck</a> 
