@@ -1,11 +1,11 @@
-<img src='./public/Icon.png' alt='Logo' width='300'>
+<a href="https://gsonkow.github.io/ygodeckratio" target="_blank"><img src='./public/Icon.png' alt='Logo' width='300'></a>
 <!-- link to website -->
 
 <a href="https://ko-fi.com/gsonkow" target="_blank"><img src='./src/assets/support_me_on_kofi_blue.png' alt="Support Me on Ko-fi" height='50'/></a>
 
 # Yu-Gi-Oh! Ratio Visualizer
 
-___
+## [Try it here!](https://gsonkow.github.io/ygodeckratio)
 
 This tool aims to help Yu-Gi-Oh! players visualize and adjust the card ratios in their decks to open better hands in games more consistently.
 
