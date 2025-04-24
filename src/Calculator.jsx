@@ -71,6 +71,8 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
     </div> : <></>}
     {standardTagDisplay('Starters', totalPerTag[6], standardTag(6))}
 
+    {startersPerEngine.some(engine => engine > 0) ?
+    <>
     <div id='explain'>
         <h2>Starters per Engine</h2>
         <p>Probability of opening the specified number of starters by engine.</p>
@@ -92,7 +94,7 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
         )
     })}
         </tbody>
-    </table>
+    </table> </>: <></> }
 
     {totalPerTag[7] > 0 ? 
     <div id='explain'>
