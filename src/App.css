@@ -1,5 +1,4 @@
 #root {
-  max-width: 1700px;
   margin-left: 5%;
   margin-right: 5%;
   padding: 4px;
@@ -24,6 +23,11 @@ input{
   justify-self: stretch;
 }
 
+div[id='card']{
+  display: grid;
+  grid-template-columns: 2.6rem 1.5fr 4rem 1fr;
+  align-items: center;
+}
 
 img[id='Logo']{
   max-width: 10rem;
@@ -76,4 +80,44 @@ footer{
   bottom: 0%;
   left: 0%;
   width: 100%;
+}
+
+/* Mobile */
+@media only screen and (max-width: 1015px) {
+  #root {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    padding: 2px;
+  }
+
+  div[id='card'] {
+    grid-template-columns: 2.6rem 1fr 4rem;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+      "lt cn rt"
+      "ft ft ft";
+  }
+
+  div[id='card'] > * {
+    grid-column: span 1;
+  }
+
+  div[id='tags'] {
+    grid-area: ft;
+  }
+
+  input[id='name'] {
+    font-size: 0.9rem;
+    grid-area: cn;
+  }
+
+  input[id='quant']{
+    font-size: 0.9rem;
+    grid-area: rt;
+  }
+
+  button[id='remove'] {
+    font-size: 0.9rem;
+    grid-area: lt;
+  }
 }

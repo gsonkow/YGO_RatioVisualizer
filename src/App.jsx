@@ -177,7 +177,7 @@ function App() {
         {/* Card input and editor */}
         {cards.map((card, index) => {
           return (
-            <div id="card" key={index} style={{ display: 'grid', gridTemplateColumns: '2.6rem 1.5fr 4rem 1fr', alignItems: 'center'}}>
+            <div id="card" key={index}>
               <button  id="remove" onClick={() => {
                 const newCards = [...cards]
                 newCards.splice(index, 1)
@@ -186,12 +186,12 @@ function App() {
                 setMinDeckSize(totalQuantity)
                 if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
               }}>X</button>
-              <input type="text" placeholder='Card Name' value={card.name} onChange={e => {
+              <input id='name'type="text" placeholder='Card Name' value={card.name} onChange={e => {
                 const newCards = [...cards]
                 newCards[index].name = e.target.value
                 setCards(newCards)
               }} />
-              <input type="number" value={card.quantity} min="0" onChange={e => {
+              <input id='quant' type="number" value={card.quantity} min="0" onChange={e => {
                 const newCards = [...cards]
                 newCards[index].quantity = Number(e.target.value)
                 setCards(newCards)
@@ -201,6 +201,7 @@ function App() {
               }} />
               <CreatableSelect 
                 value={card.tags} 
+                id='tags'
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -214,7 +215,10 @@ function App() {
                     boxShadow: 'none',
                     '&:hover': {
                       border: '1px solid #ccc',
-                    }
+                    },
+                    '@media (max-width: 1015px)': {
+                      fontSize: '0.9rem',
+                    },
                   }),
                   input: (base) => ({
                     ...base,
