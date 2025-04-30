@@ -6,7 +6,6 @@ import { VitePluginRadar } from 'vite-plugin-radar'
 export default defineConfig({
   plugins: [react(),
     VitePluginRadar({
-      // Google Analytics tag injection
       analytics: {
         id: 'G-E8YXJZTXQE',
       },

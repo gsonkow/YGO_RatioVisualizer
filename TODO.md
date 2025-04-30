@@ -1,4 +1,5 @@
-- multi-hypergeometric to check opening discard + dead card probability
+- ideal hand (select multiple tags to be present in an 'ideal hand')
+    - multi-hypergeometric to check opening discard + dead card probability
 - consolidate custom tag results
     - consolidate results option?
 - 6th draw for going second
@@ -6,5 +7,3 @@
 - suggestions/autofill when entering card name
 - more import options
 - mobile responsive layout
-- analytics
-- post/publish/host
