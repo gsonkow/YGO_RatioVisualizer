@@ -59,9 +59,8 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
         }
     }
 
-    //TODO: put results in grid/ table format
     return <div id='results'>
-    <p>Hover your mouse over any percentage to see the raw calculation.</p>
+    <p id='hoverHelp'>Hover your mouse over any percentage to see the raw calculation.</p>
 
     {/* Default standard tags are hard coded for easy access to custom explanation text (and ordering too i guess)*/}
     {totalPerTag[6] > 0 ?

@@ -61,7 +61,7 @@ function App() {
   const [setupCounter , setSetupCounter] = useState(0)
 
 
-  //TODO: validate tag input and clean input
+  //TODO(?): validate tag input
   const handleCreateTag = (inputValue) => {
     const newTag = { value: inputValue, label: inputValue }
     setTags((prevTags) => [...prevTags, newTag])
@@ -156,8 +156,9 @@ function App() {
   return (
     <>
       <h1><img id='Logo' src={Logo} alt="YGO Ratio Visualizer"/></h1>
-      <h3>By <a href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>gsonkow</a></h3>
-      <a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi"/></a>
+      <h3>By <a id="git link" href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>gsonkow</a> 
+      &emsp;<a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi"/></a></h3>
+      <h3>-Scroll down to see results!-</h3>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>

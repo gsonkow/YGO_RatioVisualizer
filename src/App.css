@@ -11,8 +11,12 @@ h1{
 }
 
 h3{
+  height: auto;
+  line-height: auto;
   margin-top: 0;
   margin-bottom: 1rem;
+  align-content: center;
+  text-align: center;
 }
 
 input{
@@ -45,6 +49,7 @@ img[id='Ko-fi']{
   max-width: 14rem;
   max-height: 14rem;
   margin: 0;
+  vertical-align: middle;
 }
 img[id='Ko-fi']:hover{
   filter: brightness(0.9);
