@@ -60,6 +60,7 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
     }
 
     return <div id='results'>
+    <p id='helper'>Don’t forget to apply tags to your cards before checking your stats!</p>
     <p id='hoverHelp'>Hover your mouse over any percentage to see the raw calculation.</p>
 
     {/* Default standard tags are hard coded for easy access to custom explanation text (and ordering too i guess)*/}
@@ -161,6 +162,8 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
         <p>Probability of opening the specified number of dead cards going second.</p>
     </div> : <></>}
     {standardTagDisplay('Bad Draws', totalPerTag[3], standardTag(3))}
+
+    <p id='helper'>Type in a custom tag in the dropdown menu and apply it to a card(s) to see them below:</p>
 
     {deckTags.map((tag, index) => {
         if (customTags.some(customTag => customTag === tag) && totalPerTag[index] > 0) {

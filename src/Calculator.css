@@ -13,8 +13,20 @@ h2 {
     margin-bottom: 0;
 }
 
+p[id='helper']{
+    font-size: larger;
+    font-weight: bold;
+    color: rgb(219, 219, 0);
+}
+
+p[id='hoverHelp']{
+    font-size: medium;
+    font-weight: bold;
+    color:rgb(219, 72, 72);
+}
+
 span[id='highlight'] {
-    color: rgb(233, 52, 52);
+    color: rgb(219, 72, 72);
 }
 
 table {

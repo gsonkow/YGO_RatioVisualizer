@@ -158,16 +158,30 @@ function App() {
       <h1><img id='Logo' src={Logo} alt="YGO Ratio Visualizer"/></h1>
       <h3>By <a id="git link" href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo"/>gsonkow</a> 
       &emsp;<a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi"/></a></h3>
-      <h3>-Scroll down to see results!-</h3>
+      <p id='helper'>-Scroll down to see results!-</p>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>
         &emsp;<input type="text" style={{width: '50%'}} placeholder='YDKE URL' value={ydkeURL} onChange={e => setYDKEURL(e.target.value)}/>
         <br></br>
-        Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
+        Deck Size: &nbsp;
+        <button id='decrement' onClick={() => {
+          if (deckSize > minDeckSize) {
+            setDeckSize(deckSize - 1)
+          }
+        }}>-</button>
+        <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
+        <button id='increment' onClick={() => { setDeckSize(deckSize + 1) }}>+</button>
         &emsp;
-        Number of Engines: <input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
+        
+        Number of Engines: &nbsp;
+        <button id='decrement' onClick={() => {
+          if (numEngines > 1) {
+            handleEngineChange(numEngines - 1)
+          }
+        }}>-</button><input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
           handleEngineChange(Number(e.target.value))
           }} />
+        <button id='increment' onClick={() => { handleEngineChange(numEngines + 1) }}>+</button>
         &emsp;
         <button onClick={() => {
           setCards([])
@@ -192,6 +206,16 @@ function App() {
                 newCards[index].name = e.target.value
                 setCards(newCards)
               }} />
+              <button id="decrement" onClick={() => {
+                const newCards = [...cards]
+                if (card.quantity > 0) {
+                  newCards[index].quantity = card.quantity - 1
+                  setCards(newCards)
+                  const totalQuantity = newCards.reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
+                  setMinDeckSize(totalQuantity)
+                  if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
+                }
+              }}>-</button>
               <input id='quant' type="number" value={card.quantity} min="0" onChange={e => {
                 const newCards = [...cards]
                 newCards[index].quantity = Number(e.target.value)
@@ -200,6 +224,14 @@ function App() {
                 setMinDeckSize(totalQuantity)
                 if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
               }} />
+              <button id="increment" onClick={() => {
+                const newCards = [...cards]
+                newCards[index].quantity = card.quantity + 1
+                setCards(newCards)
+                const totalQuantity = newCards.reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
+                setMinDeckSize(totalQuantity)
+                if (deckSize < totalQuantity) { setDeckSize(totalQuantity) }
+              }}>+</button>
               <CreatableSelect 
                 value={card.tags} 
                 id='tags'
@@ -268,11 +300,25 @@ function App() {
         })}
         
         <br></br>
-        Deck Size: <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
+        Deck Size: &nbsp;
+        <button id='decrement' onClick={() => {
+          if (deckSize > minDeckSize) {
+            setDeckSize(deckSize - 1)
+          }
+        }}>-</button>
+        <input type="number" min={minDeckSize} value={deckSize} style={{width: '50px'}} onChange={e => setDeckSize(e.target.value)} />
+        <button id='increment' onClick={() => { setDeckSize(deckSize + 1) }}>+</button>
         &emsp;
-        Number of Engines: <input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
+        
+        Number of Engines: &nbsp;
+        <button id='decrement' onClick={() => {
+          if (numEngines > 1) {
+            handleEngineChange(numEngines - 1)
+          }
+        }}>-</button><input type="number" min="1" value={numEngines} style={{width: '50px'}} onChange={e => {
           handleEngineChange(Number(e.target.value))
           }} />
+        <button id='increment' onClick={() => { handleEngineChange(numEngines + 1) }}>+</button>
         &emsp;
         <button onClick={() => {
           setCards([...cards, {id: cards.length + 1, name: '', quantity: 1, tags: []}])

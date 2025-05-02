@@ -19,12 +19,24 @@ h3{
   text-align: center;
 }
 
+p[id='helper']{
+  font-size: larger;
+  font-weight: bold;
+  color: rgb(219, 219, 0);
+}
+
 input{
   padding: 0.5rem;
   margin: 0.5rem 0.05rem;
   border: 1px solid #ccc;
   font-size: 1rem;
   justify-self: stretch;
+  background-color: #2b2a33;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 
 div[id='card']{
@@ -78,6 +90,13 @@ button[id='remove']{
   border-radius: 2px;
 }
 
+button[id='decrement'],
+button[id='increment']{
+  display:none;
+  font-weight: 600;
+  border-radius: 2px;
+}
+
 footer{
   text-align: center;
   position: static bottom;
@@ -96,11 +115,31 @@ footer{
   }
 
   div[id='card'] {
-    grid-template-columns: 2.6rem 1fr 4rem;
+    grid-template-columns: 2.6rem 1fr 2.6rem 4rem 2.6rem;
     grid-template-rows: auto auto;
     grid-template-areas: 
-      "lt cn rt"
-      "ft ft ft";
+      "lt cn lb rt rb"
+      "ft ft ft ft ft";
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  button[id='decrement']{
+    grid-area: lb;
+    display: inline-block;
+  }
+
+  button[id='increment']{
+    grid-area: rb;
+    display: inline-block;
   }
 
   div[id='card'] > * {
