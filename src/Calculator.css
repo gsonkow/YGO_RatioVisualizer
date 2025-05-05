@@ -1,5 +1,7 @@
 div[id='results']{
-    text-align: left;;
+    text-align: left;
+    padding: 1rem;
+    overflow: auto;
 }
 
 div[id='starters']{

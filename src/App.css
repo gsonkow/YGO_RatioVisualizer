@@ -1,22 +1,37 @@
 #root {
-  margin-left: 5%;
-  margin-right: 5%;
-  padding: 4px;
   text-align: center;
 }
 
-h1{
-  font-size: 2.5rem;
+* {    
   margin: 0;
+  padding: 0;
 }
 
-h3{
-  height: auto;
-  line-height: auto;
+header{
+  background-color: #363638;
+  padding: 0;
   margin-top: 0;
   margin-bottom: 1rem;
-  align-content: center;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+img[id='Logo']{
+  max-width: 6rem;
+  max-height: 6rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 1rem;
+}
+
+header span {
+  text-align: right;
+  margin-top: 2rem;
+  margin-right: 1rem;
+  line-height: 1rem;
+  white-space: nowrap;
 }
 
 p[id='helper']{
@@ -32,6 +47,7 @@ input{
   font-size: 1rem;
   justify-self: stretch;
   background-color: #2b2a33;
+  border-radius: 2px;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -43,12 +59,8 @@ div[id='card']{
   display: grid;
   grid-template-columns: 2.6rem 1.5fr 4rem 1fr;
   align-items: center;
-}
-
-img[id='Logo']{
-  max-width: 10rem;
-  max-height: 10rem;
-  margin: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 img[id='gitLogo']{
@@ -109,9 +121,13 @@ footer{
 /* Mobile */
 @media only screen and (max-width: 1015px) {
   #root {
-    margin-left: 2.5%;
-    margin-right: 2.5%;
     padding: 2px;
+  }
+
+  span[id='deckSetting'],
+  span[id= 'deckSetting'] button,
+  span[id='deckSetting'] input {
+    font-size: 0.8rem;
   }
 
   div[id='card'] {
@@ -129,6 +145,7 @@ footer{
   }
 
   input[type=number] {
+    appearance: textfield;
     -moz-appearance: textfield;
   }
 
