@@ -175,7 +175,7 @@ function App() {
           }}>-</button>
           <input id="deckSetting" type="number" min={minDeckSize} value={deckSize} style={{ width: '50px' }} onChange={e => setDeckSize(e.target.value)} />
           <button id='increment' onClick={() => { setDeckSize(deckSize + 1) }}>+</button>
-          &emsp;
+          &emsp; {mobileBreak()}
 
           Number of Engines: &nbsp;
           <button id='decrement' onClick={() => {
@@ -187,7 +187,7 @@ function App() {
             handleEngineChange(Number(e.target.value))
           }} />
           <button id='increment' onClick={() => { handleEngineChange(numEngines + 1) }}>+</button>
-          &emsp;
+          &emsp; {mobileBreak()}
           <button onClick={() => {
             setCards([])
             setDeckSize(40)
@@ -315,7 +315,7 @@ function App() {
           }}>-</button>
           <input id="deckSetting" type="number" min={minDeckSize} value={deckSize} style={{ width: '50px' }} onChange={e => setDeckSize(e.target.value)} />
           <button id='increment' onClick={() => { setDeckSize(deckSize + 1) }}>+</button>
-          &emsp;
+          &emsp; {mobileBreak()}
 
           Number of Engines: &nbsp;
           <button id='decrement' onClick={() => {
@@ -327,7 +327,8 @@ function App() {
             handleEngineChange(Number(e.target.value))
           }} />
           <button id='increment' onClick={() => { handleEngineChange(numEngines + 1) }}>+</button>
-          &emsp;
+          &emsp; {mobileBreak()}
+
           <button onClick={() => {
             setCards([...cards, { id: cards.length + 1, name: '', quantity: 1, tags: [] }])
             const totalQuantity = [...cards, { id: cards.length + 1, name: '', quantity: 1 }].reduce((sum, card) => sum + parseInt(card.quantity || 0, 10), 0)
@@ -348,6 +349,22 @@ function App() {
   )
 }
 
+function mobileBreak() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1015);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1015);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return isMobile ? <br></br> : null;
+}
 
 
 export default App

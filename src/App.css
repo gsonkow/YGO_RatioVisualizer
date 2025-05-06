@@ -124,12 +124,6 @@ footer{
     padding: 2px;
   }
 
-  span[id='deckSetting'],
-  span[id= 'deckSetting'] button,
-  span[id='deckSetting'] input {
-    font-size: 0.8rem;
-  }
-
   div[id='card'] {
     grid-template-columns: 2.6rem 1fr 2.6rem 4rem 2.6rem;
     grid-template-rows: auto auto;
