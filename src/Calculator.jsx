@@ -40,7 +40,7 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
             starterProbabilities[engine][starters + 3] = hypergeometric(deckSize, startersPerEngine[engine], CARDS_OPENED, starters)
         }
     }
-    
+
     var totalPerTag = new Array(deckTags.length).fill(0)
     for (let i = 0; i < deckTags.length; i++) {
         for (let cardIndex = 0; cardIndex < cards.length; cardIndex++) {
@@ -60,128 +60,128 @@ export default function Calculator(cards, tags, deckSize, numEngines) {
     }
 
     return <div id='results'>
-    <p id='helper'>Don’t forget to apply tags to your cards before checking your stats!</p>
-    <p id='hoverHelp'>Hover your mouse over any percentage to see the raw calculation.</p>
+        <p id='helper'>Don’t forget to apply tags to your cards before checking your stats!</p>
+        <p id='hoverHelp'>Hover your mouse over any percentage to see the raw calculation.</p>
 
-    {/* Default standard tags are hard coded for easy access to custom explanation text (and ordering too i guess)*/}
-    {totalPerTag[6] > 0 ?
-    <div id='explain'>
-        <h2>Starters</h2>
-        <p>Probability of opening the specified number of starters.</p>
-    </div> : <></>}
-    {standardTagDisplay('Starters', totalPerTag[6], standardTag(6))}
+        {/* Default standard tags are hard coded for easy access to custom explanation text (and ordering too i guess)*/}
+        {totalPerTag[6] > 0 ?
+            <div id='explain'>
+                <h2>Starters</h2>
+                <p>Probability of opening the specified number of starters.</p>
+            </div> : <></>}
+        {standardTagDisplay('Starters', totalPerTag[6], standardTag(6))}
 
-    {startersPerEngine.some(engine => engine > 0) ?
-    <>
-    <div id='explain'>
-        <h2>Starters per Engine</h2>
-        <p>Probability of opening the specified number of starters by engine.</p>
-    </div>
-    <table id='starters'>
-        <tbody>
-        <tr>
-            <th>Engine</th>
-            <th>Starters</th>
-            {openingRange()}
-        </tr>
-    {starterProbabilities.map((engine, index) => {
-        return (
-            <tr key={index}>
-                <td>Engine {index + 1}</td>
-                <td id='numeric'>{startersPerEngine[index]}</td>
-                {engine.map((starters, index) => {return (<td id='numeric' key={index}>{percentage(starters)}</td>)})}
-            </tr>
-        )
-    })}
-        </tbody>
-    </table> </>: <></> }
-
-    {totalPerTag[7] > 0 ? 
-    <div id='explain'>
-        <h2>Extenders</h2>
-        <p>Probability of opening the specified number of extenders.</p>
-    </div> : <></>}
-    {standardTagDisplay('Extenders', totalPerTag[7], standardTag(7))}
-
-    {totalPerTag[4] > 0 ? 
-    <div id='explain'>
-        <h2>Hand Traps</h2>
-        <p>Probability of opening the specified number of hand traps.</p>
-    </div> : <></>}
-    {standardTagDisplay('Hand Traps', totalPerTag[4], standardTag(4))}
-
-    {totalPerTag[5] > 0 ?
-    <div id='explain'>
-        <h2>Board Breakers</h2>
-        <p>Probability of opening the specified number of board breakers.</p>
-    </div> : <></>}
-    {standardTagDisplay('Board Breakers', totalPerTag[5], standardTag(5))}
-
-    {totalPerTag[0] > 0 ?
-    <>
-    <div id='explain'>
-        <h2>Duplicate 'Hard Once Per Turn' Effects</h2>
-        <p>
-            Probability of opening 2 or more cards with the same 'hard once per turn' effect in your opening hand. (Shown as a total and per tag)
-            <br/>Ideally, this is kept to a <span id='highlight'>minimum</span> to avoid dead cards in your hand.
-        </p>
-    </div>
-    <table id='duplicateOPT'>
-        <tbody>
-        <tr>
-            <th>Total Chance</th>
-            {duplicateOPTProbPerTag.map((value, index) => {if (index > 0 && value > 0) {return (<th key={index}>{deckTags[index]}</th>)}})}
-        </tr>
-        <tr>
-            {duplicateOPTProbPerTag.map((value, index) => {if (value > 0) {return (<td id='numeric' key={index}>{percentage(value)}</td>)}})}
-        </tr>
-        </tbody>
-    </table>
-    </>: <></> }
-
-    {totalPerTag[1] > 0 ?
-    <div id='explain'>
-        <h2>Discard Effects</h2>
-        <p>
-            Probability of opening the specified number of cards with a cost or effect that needs to discard a card.
-            <br/>Take note that opening/comboing into a discard cost/effect can <span id='highlight'>reduce the impact</span> of any dead cards in your hand.
-        </p>
-    </div> : <></>}
-    {standardTagDisplay('Discard Costs/Effects', totalPerTag[1], standardTag(1))}
-
-    {totalPerTag[2] > 0 ?
-    <div id='explain'>
-        <h2>Bad Draws (Going First)</h2>
-        <p>Probability of opening the specified number of dead cards going first.</p>
-    </div> : <></>}
-    {standardTagDisplay('Bad Draws', totalPerTag[2], standardTag(2))}
-
-    {totalPerTag[3] > 0 ?
-    <div id='explain'>
-        <h2>Bad Draws (Going Second)</h2>
-        <p>Probability of opening the specified number of dead cards going second.</p>
-    </div> : <></>}
-    {standardTagDisplay('Bad Draws', totalPerTag[3], standardTag(3))}
-
-    <p id='helper'>Type in a custom tag in the dropdown menu and apply it to a card(s) to see them below:</p>
-
-    {deckTags.map((tag, index) => {
-        if (customTags.some(customTag => customTag === tag) && totalPerTag[index] > 0) {
-            return (
-                <>
-                <div id='explain' key={index}>
-                    <h2>{tag}</h2>
-                    <p>Probability of opening the specified number of cards with the {tag} tag.</p>
+        {startersPerEngine.some(engine => engine > 0) ?
+            <>
+                <div id='explain'>
+                    <h2>Starters per Engine</h2>
+                    <p>Probability of opening the specified number of starters by engine.</p>
                 </div>
-                {standardTagDisplay(tag, totalPerTag[index], standardTag(index))}
-                </>
-            )
-        }
-    })}
+                <table id='starters'>
+                    <tbody>
+                        <tr>
+                            <th>Engine</th>
+                            <th>Starters</th>
+                            {openingRange()}
+                        </tr>
+                        {starterProbabilities.map((engine, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>Engine {index + 1}</td>
+                                    <td id='numeric'>{startersPerEngine[index]}</td>
+                                    {engine.map((starters, index) => { return (<td id='numeric' key={index}>{percentage(starters)}</td>) })}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table> </> : <></>}
+
+        {totalPerTag[7] > 0 ?
+            <div id='explain'>
+                <h2>Extenders</h2>
+                <p>Probability of opening the specified number of extenders.</p>
+            </div> : <></>}
+        {standardTagDisplay('Extenders', totalPerTag[7], standardTag(7))}
+
+        {totalPerTag[4] > 0 ?
+            <div id='explain'>
+                <h2>Hand Traps</h2>
+                <p>Probability of opening the specified number of hand traps.</p>
+            </div> : <></>}
+        {standardTagDisplay('Hand Traps', totalPerTag[4], standardTag(4))}
+
+        {totalPerTag[5] > 0 ?
+            <div id='explain'>
+                <h2>Board Breakers</h2>
+                <p>Probability of opening the specified number of board breakers.</p>
+            </div> : <></>}
+        {standardTagDisplay('Board Breakers', totalPerTag[5], standardTag(5))}
+
+        {totalPerTag[0] > 0 ?
+            <>
+                <div id='explain'>
+                    <h2>Duplicate 'Hard Once Per Turn' Effects</h2>
+                    <p>
+                        Probability of opening 2 or more cards with the same 'hard once per turn' effect in your opening hand. (Shown as a total and per tag)
+                        <br />Ideally, this is kept to a <span id='highlight'>minimum</span> to avoid dead cards in your hand.
+                    </p>
+                </div>
+                <table id='duplicateOPT'>
+                    <tbody>
+                        <tr>
+                            <th>Total Chance</th>
+                            {duplicateOPTProbPerTag.map((value, index) => { if (index > 0 && value > 0) { return (<th key={index}>{deckTags[index]}</th>) } })}
+                        </tr>
+                        <tr>
+                            {duplicateOPTProbPerTag.map((value, index) => { if (value > 0) { return (<td id='numeric' key={index}>{percentage(value)}</td>) } })}
+                        </tr>
+                    </tbody>
+                </table>
+            </> : <></>}
+
+        {totalPerTag[1] > 0 ?
+            <div id='explain'>
+                <h2>Discard Effects</h2>
+                <p>
+                    Probability of opening the specified number of cards with a cost or effect that needs to discard a card.
+                    <br />Take note that opening/comboing into a discard cost/effect can <span id='highlight'>reduce the impact</span> of any dead cards in your hand.
+                </p>
+            </div> : <></>}
+        {standardTagDisplay('Discard Costs/Effects', totalPerTag[1], standardTag(1))}
+
+        {totalPerTag[2] > 0 ?
+            <div id='explain'>
+                <h2>Bad Draws (Going First)</h2>
+                <p>Probability of opening the specified number of dead cards going first.</p>
+            </div> : <></>}
+        {standardTagDisplay('Bad Draws', totalPerTag[2], standardTag(2))}
+
+        {totalPerTag[3] > 0 ?
+            <div id='explain'>
+                <h2>Bad Draws (Going Second)</h2>
+                <p>Probability of opening the specified number of dead cards going second.</p>
+            </div> : <></>}
+        {standardTagDisplay('Bad Draws', totalPerTag[3], standardTag(3))}
+
+        <p id='helper'>Type in a custom tag in the dropdown menu and apply it to a card(s) to see them below:</p>
+
+        {deckTags.map((tag, index) => {
+            if (customTags.some(customTag => customTag === tag) && totalPerTag[index] > 0) {
+                return (
+                    <>
+                        <div id='explain' key={index}>
+                            <h2>{tag}</h2>
+                            <p>Probability of opening the specified number of cards with the {tag} tag.</p>
+                        </div>
+                        {standardTagDisplay(tag, totalPerTag[index], standardTag(index))}
+                    </>
+                )
+            }
+        })}
     </div>
 }
 
-function openingRange () {
+function openingRange() {
     return (
         <>
             <th id='numeric'>1+</th>
@@ -199,9 +199,9 @@ function openingRange () {
 
 function percentage(value) {
     //return Math.round(value * 100000) / 1000
-    return <div id ='percentage'>
+    return <div id='percentage'>
         <div id='rounded'>{Math.round(value * 10000) / 100}%</div>
-        <div id='raw'>{value === 0 ? '0.00' : value }</div> 
+        <div id='raw'>{value === 0 ? '0.00' : value}</div>
     </div>
 }
 
@@ -211,17 +211,17 @@ function standardTagDisplay(name, total, probs) {
     }
     return (
         <table id='standardTagDisplay'>
-        <tbody>
-        <tr>
-            <th>{name}</th>
-            {openingRange()}
-        </tr>
-        <tr>
-            <td id='numeric'>{total}</td>
-            {probs.map((value, index) => {return (<td id='numeric' key={index}>{percentage(value)}</td>)})}
-        </tr>
-        </tbody>
-    </table>
+            <tbody>
+                <tr>
+                    <th>{name}</th>
+                    {openingRange()}
+                </tr>
+                <tr>
+                    <td id='numeric'>{total}</td>
+                    {probs.map((value, index) => { return (<td id='numeric' key={index}>{percentage(value)}</td>) })}
+                </tr>
+            </tbody>
+        </table>
     )
 }
 
@@ -232,12 +232,12 @@ function hasTag(cardTags, targetTag) {
 function factorial(n) {
     return n > 1 ? n * factorial(n - 1) : 1
 }
-  
+
 function combination(m, n) {
     if (m < n) return 0
     return factorial(m) / (factorial(n) * factorial(m - n))
 }
-  
+
 /*
 Hypergeometric Distribution
     N: The total size of the population.
@@ -248,7 +248,7 @@ Hypergeometric Distribution
 function hypergeometric(N, K, n, k) {
     return (combination(K, k) * combination(N - K, n - k)) / combination(N, n)
 }
-  
+
 /*
 Hypergeometric Distribution for at least k successes
     N: The total size of the population.
@@ -259,7 +259,7 @@ Hypergeometric Distribution for at least k successes
 function hypergeometricAtLeast(N, K, n, k) {
     let probability = 0
     for (let i = k; i <= Math.min(K, n); i++) {
-      probability += hypergeometric(N, K, n, i)
+        probability += hypergeometric(N, K, n, i)
     }
     return probability
 }

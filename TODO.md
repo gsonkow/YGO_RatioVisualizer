@@ -1,3 +1,4 @@
+- save deck to cookie
 - ideal hand (select multiple tags to be present in an 'ideal hand')
     - multi-hypergeometric to check opening discard + dead card probability
 - consolidate custom tag results
