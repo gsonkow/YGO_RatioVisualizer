@@ -13,9 +13,13 @@ header{
   margin-top: 0;
   margin-bottom: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+h1{
+  padding-top: 1.5rem;
 }
 
 img[id='Logo']{
@@ -32,6 +36,22 @@ header span {
   margin-right: 1rem;
   line-height: 1rem;
   white-space: nowrap;
+}
+
+span[id="loadContainer"]{
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
+span[id="saveContainer"]{
+  padding: 10px;
+}
+
+span[id="saveLoadContainer"]{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 p[id='helper']{
@@ -122,6 +142,14 @@ footer{
 @media only screen and (max-width: 1015px) {
   #root {
     padding: 2px;
+  }
+
+  header{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h1{
+    display: none;
   }
 
   div[id='card'] {

@@ -39,6 +39,10 @@ export const SELECT_STYLES = {
         color: 'white',
         cursor: 'pointer',
     }),
+    singleValue: (base) => ({
+        ...base,
+        color: 'white',
+    }),
     menu: (base) => ({
         ...base,
         margin: '0',

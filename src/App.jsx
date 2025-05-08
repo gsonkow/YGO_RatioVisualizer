@@ -1,13 +1,14 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import makeAnimated from 'react-select/animated'
 import * as ydke from 'ydke'
 import Calculator from './Calculator.jsx'
+import { Save, Load } from './Save.jsx'
 import './App.css'
 import Kofi from './assets/support_me_on_kofi_blue.png'
 import Logo from './assets/DarkLogo.png'
 import GitLogo from './assets/github-mark-white.svg'
-import {EXAMPLE_DECK, EXAMPLE_DECK_TAGS, DEFAULT_TAGS, SELECT_STYLES} from './Const.jsx'
+import { EXAMPLE_DECK, EXAMPLE_DECK_TAGS, DEFAULT_TAGS, SELECT_STYLES } from './Const.jsx'
 
 function App() {
   //Calculator States
@@ -26,6 +27,9 @@ function App() {
 
   //Setup Example deck
   const [setupCounter, setSetupCounter] = useState(0)
+
+  // Save and Load States
+  const [loadNames, setLoadNames] = useState([])
 
 
   //TODO(?): validate tag input
@@ -114,9 +118,13 @@ function App() {
 
   // Sets up example deck
   useEffect(() => {
-    //console.log('Setting up example deck...')
     handleEngineChange(numEngines)
     importYDKE(EXAMPLE_DECK)
+    if (typeof (localStorage) !== 'undefined') {
+      if (localStorage.length > 0) {
+        setLoadNames(Object.keys(localStorage).map((key) => ({ value: key, label: key })))
+      }
+    }
   }, [])
 
 
@@ -125,9 +133,14 @@ function App() {
       <meta name="viewport" content="width=500"></meta>
       <header>
         <img id='Logo' src={Logo} alt="YGO Ratio Visualizer" />
+        <h1>YGO Deck Ratio</h1>
         <span>By <a id="git link" href="https://github.com/gsonkow/" target='_blank'><img id='gitLogo' src={GitLogo} alt="Github Logo" />gsonkow</a>
-        &emsp;<a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi" /></a></span>
+          &emsp;<a href="https://ko-fi.com/gsonkow" target="_blank"><img id='Ko-fi' src={Kofi} alt="Support me on Ko-fi" /></a></span>
       </header>
+      <span id="saveLoadContainer">
+      {Save(cards, deckSize, minDeckSize, numEngines, setLoadNames)}
+      {Load(setCards, setDeckSize, setMinDeckSize, setNumEngines, loadNames)}
+      </span>
       <p id='helper'>-Scroll down to see results!-</p>
       <div id="calculator">
         <button disabled={importing} onClick={() => importYDKE(ydkeURL)}>{importMessage}</button>

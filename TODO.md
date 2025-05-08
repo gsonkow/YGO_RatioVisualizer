@@ -1,4 +1,4 @@
-- save deck to cookie
+- ~~save deck to local storage~~
 - ideal hand (select multiple tags to be present in an 'ideal hand')
     - multi-hypergeometric to check opening discard + dead card probability
 - consolidate custom tag results
@@ -7,4 +7,4 @@
 - ?per engine of other tags?
 - suggestions/autofill when entering card name
 - more import options
-- mobile responsive layout
+- ~~mobile responsive layout~~
